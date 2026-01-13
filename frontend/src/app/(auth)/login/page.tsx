@@ -64,7 +64,7 @@ export default function LoginPage() {
           fontSize: 'var(--font-size-sm)',
           color: 'var(--color-text-secondary)'
         }}>
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link href="/register" style={{ color: 'var(--color-primary)', fontWeight: 500 }}>
             Sign up
           </Link>
