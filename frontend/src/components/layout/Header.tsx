@@ -59,7 +59,7 @@ export function Header() {
         {/* Logo/Title */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
           <Link
-            href="/todos"
+            href="/"
             style={{
               fontSize: 'var(--font-size-xl)',
               fontWeight: 700,
