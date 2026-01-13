@@ -1,4 +1,4 @@
-# Claude Code Rules
+﻿# Claude Code Rules
 
 This file is generated during init for the selected agent.
 
@@ -22,6 +22,137 @@ You are an expert AI assistant specializing in Spec-Driven Development (SDD). Yo
   - Feature-specific → `history/prompts/<feature-name>/`
   - General → `history/prompts/general/`
 - ADR suggestions: when an architecturally significant decision is detected, suggest: "📋 Architectural decision detected: <brief>. Document? Run `/sp.adr <title>`." Never auto‑create ADRs; require user consent.
+
+## Project Context: Todo Full-Stack Web Application (Phase II)
+
+### Objective
+Transform a console-based Todo application into a modern multi-user web application with persistent storage using the Agentic Dev Stack workflow: Write spec → Generate plan → Break into tasks → Implement via Claude Code.
+
+### Technology Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Next.js 16+ (App Router) |
+| Backend | Python FastAPI |
+| ORM | SQLModel |
+| Database | Neon Serverless PostgreSQL |
+| Authentication | Better Auth (JWT-based) |
+| Development | Claude Code + Spec-Kit Plus |
+
+### Core Requirements
+- Implement all 5 Basic Level features as a web application
+- Create RESTful API endpoints with proper HTTP methods
+- Build responsive frontend interface
+- Store data in Neon Serverless PostgreSQL database
+- Multi-user authentication with signup/signin using Better Auth
+- User data isolation (users can only access their own todos)
+
+### Authentication Architecture
+**Better Auth JWT Flow:**
+1. User logs in on Frontend → Better Auth creates session and issues JWT token
+2. Frontend makes API call → Includes JWT token in `Authorization: Bearer <token>` header
+3. Backend receives request → Extracts token from header, verifies signature using shared secret
+4. Backend identifies user → Decodes token to get user ID, email, etc.
+5. Backend filters data → Returns only tasks belonging to that authenticated user
+
+**Security Requirements:**
+- Never hardcode JWT secrets; use `.env` files
+- Validate JWT tokens on every protected backend endpoint
+- Match user ID from token with user ID in request URL/body
+- Implement proper error handling for invalid/expired tokens
+
+### Agent Delegation Rules
+
+**CRITICAL: Use specialized agents for their respective domains. Do NOT implement features directly unless explicitly instructed.**
+
+#### 1. Authentication Agent (`auth-security`)
+**Use for:**
+- Implementing Better Auth integration
+- Setting up JWT token generation and verification
+- Creating signup/signin endpoints and flows
+- Securing routes and API endpoints
+- Reviewing authentication code for vulnerabilities
+- Password hashing and session management
+
+**Example triggers:**
+- "Implement user authentication"
+- "Add login/signup functionality"
+- "Secure the API endpoints"
+- "Review auth implementation for security issues"
+
+#### 2. Frontend Agent (`nextjs-ui`)
+**Use for:**
+- Building Next.js 16+ App Router pages and components
+- Creating responsive UI layouts
+- Implementing forms (todo creation, login, signup)
+- Client-side state management
+- Fetching data from backend APIs
+- Handling authentication state on frontend
+- Routing and navigation
+
+**Example triggers:**
+- "Create a todo list component"
+- "Build the login page"
+- "Make the dashboard responsive"
+- "Implement the todo form with validation"
+
+#### 3. Backend Agent (`fastapi-backend-dev`)
+**Use for:**
+- Creating FastAPI REST API endpoints
+- Implementing request/response models with Pydantic
+- Adding JWT authentication middleware
+- Connecting to Neon database via SQLModel
+- Implementing business logic for CRUD operations
+- Error handling and validation
+- API documentation
+
+**Example triggers:**
+- "Create API endpoints for todos"
+- "Implement the backend for user registration"
+- "Add validation to the create todo endpoint"
+- "Optimize the API performance"
+
+#### 4. Database Agent (`neon-db-architect`)
+**Use for:**
+- Designing database schemas for users and todos
+- Creating SQLModel models
+- Writing database migrations
+- Optimizing queries and indexes
+- Setting up Neon PostgreSQL connection
+- Implementing data relationships (users → todos)
+- Database performance tuning
+
+**Example triggers:**
+- "Design the database schema"
+- "Create a migration for the todos table"
+- "Optimize the query for fetching user todos"
+- "Set up the Neon database connection"
+
+### Development Workflow
+1. **Spec First**: Always start with `/sp.specify` to create feature specifications
+2. **Plan Architecture**: Use `/sp.plan` to design the implementation approach
+3. **Break into Tasks**: Use `/sp.tasks` to create actionable, testable tasks
+4. **Delegate to Agents**: Use the appropriate specialized agent for implementation
+5. **No Manual Coding**: All code must be generated through Claude Code agents
+6. **Iterative Review**: Review agent outputs and iterate as needed
+
+### Multi-Agent Coordination
+When a feature spans multiple domains:
+1. Start with the database schema (neon-db-architect)
+2. Build backend API endpoints (fastapi-backend-dev)
+3. Implement authentication if needed (auth-security)
+4. Create frontend UI (nextjs-ui)
+
+**Example:**
+```
+User: "Implement the todo creation feature"
+
+Response:
+1. Use neon-db-architect to ensure todos table schema is correct
+2. Use fastapi-backend-dev to create POST /api/todos endpoint
+3. Use auth-security to add JWT validation to the endpoint
+4. Use nextjs-ui to build the todo creation form
+```
 
 ## Development Guidelines
 

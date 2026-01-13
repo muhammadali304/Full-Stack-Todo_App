@@ -1,0 +1,449 @@
+openapi: 3.0.3
+info:
+  title: Todo Task Management API
+  description: |
+    RESTful API for managing todo tasks with CRUD operations, validation, and persistent storage.
+
+    This API provides endpoints for creating, retrieving, updating, and deleting tasks, as well as
+    toggling task completion status. All responses follow consistent JSON structure with RFC 7807
+    error format for failures.
+
+    **Authentication**: Stubbed for this phase (no JWT validation)
+    **Base URL**: http://localhost:8000
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+  - url: https://api.example.com
+    description: Production server (future)
+
+tags:
+  - name: tasks
+    description: Task management operations
+
+paths:
+  /api/tasks:
+    get:
+      tags:
+        - tasks
+      summary: List all tasks
+      description: |
+        Retrieves all tasks in the system, ordered by creation timestamp descending (newest first).
+        Returns an empty array if no tasks exist.
+      operationId: listTasks
+      responses:
+        '200':
+          description: Successfully retrieved task list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+              examples:
+                emptyList:
+                  summary: Empty task list
+                  value: []
+                taskList:
+                  summary: List with tasks
+                  value:
+                    - id: "550e8400-e29b-41d4-a716-446655440000"
+                      title: "Complete project documentation"
+                      description: "Write comprehensive API documentation"
+                      completed: false
+                      user_id: null
+                      created_at: "2026-01-11T10:30:00Z"
+                      updated_at: "2026-01-11T10:30:00Z"
+                    - id: "550e8400-e29b-41d4-a716-446655440001"
+                      title: "Review pull requests"
+                      description: null
+                      completed: true
+                      user_id: null
+                      created_at: "2026-01-11T09:15:00Z"
+                      updated_at: "2026-01-11T10:00:00Z"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+    post:
+      tags:
+        - tasks
+      summary: Create a new task
+      description: |
+        Creates a new task with the provided title and optional description.
+        The task is created with completed=false by default.
+      operationId: createTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskCreate'
+            examples:
+              withDescription:
+                summary: Task with description
+                value:
+                  title: "Implement user authentication"
+                  description: "Add JWT-based authentication to the API"
+              withoutDescription:
+                summary: Task without description
+                value:
+                  title: "Fix bug in task toggle endpoint"
+      responses:
+        '201':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+              example:
+                id: "550e8400-e29b-41d4-a716-446655440002"
+                title: "Implement user authentication"
+                description: "Add JWT-based authentication to the API"
+                completed: false
+                user_id: null
+                created_at: "2026-01-11T11:00:00Z"
+                updated_at: "2026-01-11T11:00:00Z"
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              examples:
+                emptyTitle:
+                  summary: Empty title
+                  value:
+                    type: "validation_error"
+                    title: "Validation Error"
+                    status: 400
+                    detail: "Title cannot be empty or whitespace-only"
+                    instance: "/api/tasks"
+                titleTooLong:
+                  summary: Title exceeds maximum length
+                  value:
+                    type: "validation_error"
+                    title: "Validation Error"
+                    status: 400
+                    detail: "Title exceeds maximum length of 200 characters"
+                    instance: "/api/tasks"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /api/tasks/{task_id}:
+    get:
+      tags:
+        - tasks
+      summary: Get a specific task
+      description: Retrieves a single task by its unique identifier.
+      operationId: getTask
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: UUID of the task to retrieve
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Task retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+              example:
+                id: "550e8400-e29b-41d4-a716-446655440000"
+                title: "Complete project documentation"
+                description: "Write comprehensive API documentation"
+                completed: false
+                user_id: null
+                created_at: "2026-01-11T10:30:00Z"
+                updated_at: "2026-01-11T10:30:00Z"
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+              example:
+                type: "not_found"
+                title: "Not Found"
+                status: 404
+                detail: "Task with id 550e8400-e29b-41d4-a716-446655440099 not found"
+                instance: "/api/tasks/550e8400-e29b-41d4-a716-446655440099"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+    patch:
+      tags:
+        - tasks
+      summary: Update a task
+      description: |
+        Updates a task's title and/or description using partial update semantics.
+        Only the fields provided in the request body will be updated.
+      operationId: updateTask
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: UUID of the task to update
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskUpdate'
+            examples:
+              updateTitle:
+                summary: Update only title
+                value:
+                  title: "Updated task title"
+              updateDescription:
+                summary: Update only description
+                value:
+                  description: "Updated task description"
+              updateBoth:
+                summary: Update both fields
+                value:
+                  title: "Updated title"
+                  description: "Updated description"
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+              example:
+                id: "550e8400-e29b-41d4-a716-446655440000"
+                title: "Updated task title"
+                description: "Write comprehensive API documentation"
+                completed: false
+                user_id: null
+                created_at: "2026-01-11T10:30:00Z"
+                updated_at: "2026-01-11T11:15:00Z"
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+    delete:
+      tags:
+        - tasks
+      summary: Delete a task
+      description: Permanently deletes a task from the system.
+      operationId: deleteTask
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: UUID of the task to delete
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Task deleted successfully (no content)
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /api/tasks/{task_id}/toggle:
+    post:
+      tags:
+        - tasks
+      summary: Toggle task completion status
+      description: |
+        Flips the completion status of a task (completed ↔ incomplete).
+        The client does not need to know the current state.
+      operationId: toggleTask
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: UUID of the task to toggle
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Task completion status toggled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+              example:
+                id: "550e8400-e29b-41d4-a716-446655440000"
+                title: "Complete project documentation"
+                description: "Write comprehensive API documentation"
+                completed: true
+                user_id: null
+                created_at: "2026-01-11T10:30:00Z"
+                updated_at: "2026-01-11T11:20:00Z"
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+components:
+  schemas:
+    Task:
+      type: object
+      required:
+        - id
+        - title
+        - completed
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the task
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: Task title (required, 1-200 characters)
+          example: "Complete project documentation"
+        description:
+          type: string
+          nullable: true
+          maxLength: 2000
+          description: Optional task description (0-2000 characters)
+          example: "Write comprehensive API documentation"
+        completed:
+          type: boolean
+          description: Task completion status
+          example: false
+        user_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: User identifier (reserved for future multi-user support)
+          example: null
+        created_at:
+          type: string
+          format: date-time
+          description: Task creation timestamp (ISO 8601, UTC)
+          example: "2026-01-11T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Last modification timestamp (ISO 8601, UTC)
+          example: "2026-01-11T10:30:00Z"
+
+    TaskCreate:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: Task title (required, 1-200 characters, cannot be empty/whitespace)
+          example: "Implement user authentication"
+        description:
+          type: string
+          maxLength: 2000
+          description: Optional task description (0-2000 characters)
+          example: "Add JWT-based authentication to the API"
+
+    TaskUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: Updated task title (1-200 characters, cannot be empty/whitespace)
+          example: "Updated task title"
+        description:
+          type: string
+          maxLength: 2000
+          nullable: true
+          description: Updated task description (0-2000 characters)
+          example: "Updated task description"
+
+    ProblemDetails:
+      type: object
+      required:
+        - type
+        - title
+        - status
+        - detail
+        - instance
+      properties:
+        type:
+          type: string
+          description: Error type identifier
+          example: "validation_error"
+        title:
+          type: string
+          description: Short, human-readable error title
+          example: "Validation Error"
+        status:
+          type: integer
+          description: HTTP status code
+          example: 400
+        detail:
+          type: string
+          description: Detailed error message
+          example: "Title exceeds maximum length of 200 characters"
+        instance:
+          type: string
+          description: Request path where the error occurred
+          example: "/api/tasks"
+      description: RFC 7807 Problem Details for HTTP APIs

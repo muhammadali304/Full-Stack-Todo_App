@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"from src.main import app; print\\(''✓ FastAPI app imported successfully''\\); print\\(f''✓ App title: {app.title}''\\); print\\(f''✓ App version: {app.version}''\\)\")",
+      "Bash(python -c \"from src.main import app; print\\(''FastAPI app imported successfully''\\); print\\(''App title:'', app.title\\); print\\(''App version:'', app.version\\); print\\(''Exception handlers registered:'', len\\(app.exception_handlers\\)\\)\")",
+      "Bash(python -m uvicorn:*)",
+      "Bash(python -m pytest:*)",
+      "Bash(python -c \"from src.api.routes.tasks import router; print\\(''Import successful - no syntax errors''\\)\")",
+      "Bash(taskkill:*)",
+      "Bash(timeout:*)",
+      "Bash(alembic upgrade:*)",
+      "Bash(curl:*)",
+      "Bash(python:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build)"
+    ]
+  }
+}
