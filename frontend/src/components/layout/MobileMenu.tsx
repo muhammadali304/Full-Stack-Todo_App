@@ -55,56 +55,52 @@ export function MobileMenu({ onLogout }: MobileMenuProps) {
 
   return (
     <>
-      {/* Hamburger Button - Only visible on mobile */}
-      <button
-        onClick={toggleMenu}
-        aria-label="Toggle menu"
-        aria-expanded={isOpen}
-        style={{
-          display: 'none',
-          flexDirection: 'column',
-          justifyContent: 'space-around',
-          width: '28px',
-          height: '28px',
-          background: 'transparent',
-          border: 'none',
-          cursor: 'pointer',
-          padding: 0,
-          zIndex: 1001,
-        }}
-        className="mobile-menu-button"
-      >
-        <span
+      {/* Hamburger Button - Only visible on mobile when menu is closed */}
+      {!isOpen && (
+        <button
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+          aria-expanded={isOpen}
           style={{
+            display: 'none',
+            flexDirection: 'column',
+            justifyContent: 'space-around',
             width: '28px',
-            height: '3px',
-            backgroundColor: 'var(--color-text)',
-            borderRadius: '2px',
-            transition: 'all 0.3s ease',
-            transform: isOpen ? 'rotate(45deg) translateY(10px)' : 'rotate(0)',
+            height: '28px',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            padding: 0,
+            zIndex: 1001,
           }}
-        />
-        <span
-          style={{
-            width: '28px',
-            height: '3px',
-            backgroundColor: 'var(--color-text)',
-            borderRadius: '2px',
-            transition: 'all 0.3s ease',
-            opacity: isOpen ? 0 : 1,
-          }}
-        />
-        <span
-          style={{
-            width: '28px',
-            height: '3px',
-            backgroundColor: 'var(--color-text)',
-            borderRadius: '2px',
-            transition: 'all 0.3s ease',
-            transform: isOpen ? 'rotate(-45deg) translateY(-10px)' : 'rotate(0)',
-          }}
-        />
-      </button>
+          className="mobile-menu-button"
+        >
+          <span
+            style={{
+              width: '28px',
+              height: '3px',
+              backgroundColor: 'var(--color-text)',
+              borderRadius: '2px',
+            }}
+          />
+          <span
+            style={{
+              width: '28px',
+              height: '3px',
+              backgroundColor: 'var(--color-text)',
+              borderRadius: '2px',
+            }}
+          />
+          <span
+            style={{
+              width: '28px',
+              height: '3px',
+              backgroundColor: 'var(--color-text)',
+              borderRadius: '2px',
+            }}
+          />
+        </button>
+      )}
 
       {/* Backdrop Overlay */}
       {isOpen && (
