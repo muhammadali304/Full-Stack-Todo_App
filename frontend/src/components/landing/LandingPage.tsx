@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/hooks/useAuth';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
+import { MobileMenu } from '@/components/layout/MobileMenu';
 
 /**
  * LandingPage component
@@ -56,6 +57,7 @@ export function LandingPage() {
         <div
           className="container"
           style={{
+            position: 'relative',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -63,9 +65,9 @@ export function LandingPage() {
           }}
         >
           {/* Logo/Title */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', flex: '0 0 auto' }}>
           <Link
-            href="/todos"
+            href="/"
             style={{
               fontSize: 'var(--font-size-xl)',
               fontWeight: 700,
@@ -77,11 +79,99 @@ export function LandingPage() {
           </Link>
         </div>
 
-          {/* Auth buttons or user info */}
-          <div style={{ display: 'flex', gap: 'var(--spacing-md)', alignItems: 'center' }}>
+        {/* Centered Navigation Links - Desktop only - Absolutely centered at screen center */}
+        <nav className="desktop-nav-center" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 'var(--spacing-lg)', alignItems: 'center' }}>
+          <Link
+            href="/"
+            style={{
+              fontSize: 'var(--font-size-base)',
+              fontWeight: 500,
+              color: 'var(--color-text)',
+              textDecoration: 'none',
+              transition: 'color var(--transition-fast)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--color-text)';
+            }}
+          >
+            Home
+          </Link>
+          {isAuthenticated && (
+            <Link
+              href="/todos"
+              style={{
+                fontSize: 'var(--font-size-base)',
+                fontWeight: 500,
+                color: 'var(--color-text)',
+                textDecoration: 'none',
+                transition: 'color var(--transition-fast)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = 'var(--color-primary)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'var(--color-text)';
+              }}
+            >
+              Manage Tasks
+            </Link>
+          )}
+          {/* <Link
+            href="/contact"
+            style={{
+              fontSize: 'var(--font-size-base)',
+              fontWeight: 500,
+              color: 'var(--color-text)',
+              textDecoration: 'none',
+              transition: 'color var(--transition-fast)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--color-text)';
+            }}
+          >
+            Contact Us
+          </Link> */}
+          <Link
+            href="/about"
+            style={{
+              fontSize: 'var(--font-size-base)',
+              fontWeight: 500,
+              color: 'var(--color-text)',
+              textDecoration: 'none',
+              transition: 'color var(--transition-fast)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--color-text)';
+            }}
+          >
+            About
+          </Link>
+        </nav>
+
+        {/* Right side - Theme toggle and user info */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--spacing-md)',
+            flex: '0 0 auto',
+          }}
+        >
+          {/* Desktop navigation - Hidden on mobile */}
+          <div className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
             {/* Theme toggle */}
             <ThemeToggle />
 
+            {/* User info and auth buttons */}
             {isAuthenticated && user ? (
               // Logged-in user: Show username and logout
               <>
@@ -138,6 +228,15 @@ export function LandingPage() {
               </>
             )}
           </div>
+
+          {/* Theme toggle for mobile - Visible only on mobile */}
+          <div className="mobile-theme-toggle">
+            <ThemeToggle />
+          </div>
+
+          {/* Mobile menu - Visible only on mobile */}
+          <MobileMenu onLogout={handleLogout} />
+        </div>
         </div>
       </nav>
 
@@ -765,6 +864,33 @@ export function LandingPage() {
           </p>
         </div>
       </footer>
+
+      {/* CSS for responsive navigation */}
+      <style jsx>{`
+        /* Hide desktop navigation on mobile */
+        @media (max-width: 767px) {
+          .desktop-nav {
+            display: none !important;
+          }
+          .desktop-nav-center {
+            display: none !important;
+          }
+        }
+
+        /* Hide mobile theme toggle on desktop */
+        @media (min-width: 768px) {
+          .mobile-theme-toggle {
+            display: none !important;
+          }
+        }
+
+        /* Show mobile theme toggle only on mobile */
+        @media (max-width: 767px) {
+          .mobile-theme-toggle {
+            display: block !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

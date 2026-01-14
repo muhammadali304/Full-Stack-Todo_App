@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { ThemeToggle } from './ThemeToggle';
+import { MobileMenu } from './MobileMenu';
 
 /**
  * Header component
@@ -48,6 +49,7 @@ export function Header() {
       <div
         className="container"
         style={{
+          position: 'relative',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -57,7 +59,7 @@ export function Header() {
         }}
       >
         {/* Logo/Title */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', flex: '0 0 auto' }}>
           <Link
             href="/"
             style={{
@@ -71,60 +73,189 @@ export function Header() {
           </Link>
         </div>
 
-        {/* User info and logout */}
-        {isAuthenticated && user && (
-          <div
+        {/* Centered Navigation Links - Desktop only - Absolutely centered at screen center */}
+        <nav className="desktop-nav-center" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 'var(--spacing-lg)', alignItems: 'center' }}>
+          <Link
+            href="/"
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--spacing-md)',
-              flexWrap: 'wrap',
+              fontSize: 'var(--font-size-base)',
+              fontWeight: 500,
+              color: 'var(--color-text)',
+              textDecoration: 'none',
+              transition: 'color var(--transition-fast)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--color-text)';
             }}
           >
+            Home
+          </Link>
+          {isAuthenticated && (
+            <Link
+              href="/todos"
+              style={{
+                fontSize: 'var(--font-size-base)',
+                fontWeight: 500,
+                color: 'var(--color-text)',
+                textDecoration: 'none',
+                transition: 'color var(--transition-fast)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = 'var(--color-primary)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'var(--color-text)';
+              }}
+            >
+              Manage Tasks
+            </Link>
+          )}
+          {/* <Link
+            href="/contact"
+            style={{
+              fontSize: 'var(--font-size-base)',
+              fontWeight: 500,
+              color: 'var(--color-text)',
+              textDecoration: 'none',
+              transition: 'color var(--transition-fast)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--color-text)';
+            }}
+          >
+            Contact Us
+          </Link> */}
+          <Link
+            href="/about"
+            style={{
+              fontSize: 'var(--font-size-base)',
+              fontWeight: 500,
+              color: 'var(--color-text)',
+              textDecoration: 'none',
+              transition: 'color var(--transition-fast)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--color-text)';
+            }}
+          >
+            About
+          </Link>
+        </nav>
+
+        {/* Right side - Theme toggle and user info */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--spacing-md)',
+            flex: '0 0 auto',
+          }}
+        >
+          {/* Desktop navigation - Hidden on mobile */}
+          <div className="desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
             {/* Theme toggle */}
             <ThemeToggle />
 
-            {/* User info */}
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-end',
-              }}
-            >
-              <span
-                style={{
-                  fontSize: 'var(--font-size-sm)',
-                  color: 'var(--color-text-secondary)',
-                }}
-              >
-                Logged in as
-              </span>
-              <span
-                style={{
-                  fontSize: 'var(--font-size-base)',
-                  fontWeight: 500,
-                  color: 'var(--color-text)',
-                }}
-              >
-                {user.username}
-              </span>
-            </div>
+            {/* User info and auth buttons */}
+            {isAuthenticated && user ? (
+              <>
+                {/* User info */}
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-end',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: 'var(--font-size-sm)',
+                      color: 'var(--color-text-secondary)',
+                    }}
+                  >
+                    Logged in as
+                  </span>
+                  <span
+                    style={{
+                      fontSize: 'var(--font-size-base)',
+                      fontWeight: 500,
+                      color: 'var(--color-text)',
+                    }}
+                  >
+                    {user.username}
+                  </span>
+                </div>
 
-            {/* Logout button */}
-            <button
-              onClick={handleLogout}
-              className="btn btn-secondary"
-              aria-label="Logout"
-              style={{
-                padding: 'var(--spacing-sm) var(--spacing-lg)',
-              }}
-            >
-              Logout
-            </button>
+                {/* Logout button */}
+                <button
+                  onClick={handleLogout}
+                  className="btn btn-secondary"
+                  aria-label="Logout"
+                  style={{
+                    padding: 'var(--spacing-sm) var(--spacing-lg)',
+                  }}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              // Not logged in: Show login and sign up buttons
+              <>
+                <Link href="/login">
+                  <button className="btn btn-secondary">Log In</button>
+                </Link>
+                <Link href="/register">
+                  <button className="btn btn-primary">Sign Up</button>
+                </Link>
+              </>
+            )}
           </div>
-        )}
+
+          {/* Theme toggle for mobile - Visible only on mobile */}
+          <div className="mobile-theme-toggle">
+            <ThemeToggle />
+          </div>
+
+          {/* Mobile menu - Visible only on mobile */}
+          <MobileMenu onLogout={handleLogout} />
+        </div>
       </div>
+
+      {/* CSS for responsive navigation */}
+      <style jsx>{`
+        /* Hide desktop navigation on mobile */
+        @media (max-width: 767px) {
+          .desktop-nav {
+            display: none !important;
+          }
+          .desktop-nav-center {
+            display: none !important;
+          }
+        }
+
+        /* Hide mobile theme toggle on desktop */
+        @media (min-width: 768px) {
+          .mobile-theme-toggle {
+            display: none !important;
+          }
+        }
+
+        /* Show mobile theme toggle only on mobile */
+        @media (max-width: 767px) {
+          .mobile-theme-toggle {
+            display: block !important;
+          }
+        }
+      `}</style>
     </header>
   );
 }
