@@ -5,8 +5,11 @@
 
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function AboutPage() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-background)' }}>
       {/* Navigation */}
@@ -484,50 +487,103 @@ export default function AboutPage() {
       {/* CTA Section */}
       <section style={{ padding: 'var(--spacing-2xl) var(--spacing-md)' }}>
         <div className="container" style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-          <h2
-            style={{
-              fontSize: 'var(--font-size-2xl)',
-              fontWeight: 600,
-              marginBottom: 'var(--spacing-lg)',
-              color: 'var(--color-text)',
-            }}
-          >
-            Ready to Get Started?
-          </h2>
-          <p
-            style={{
-              fontSize: 'var(--font-size-lg)',
-              color: 'var(--color-text-secondary)',
-              lineHeight: 1.6,
-              marginBottom: 'var(--spacing-xl)',
-            }}
-          >
-            Join thousands of users who are already managing their tasks more efficiently with Todo App.
-          </p>
-          <div style={{ display: 'flex', gap: 'var(--spacing-md)', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/register">
-              <button
-                className="btn btn-primary"
+          {isAuthenticated ? (
+            // Logged-in user: Show different message and Manage Tasks button
+            <>
+              <h2
                 style={{
-                  padding: 'var(--spacing-md) var(--spacing-xl)',
-                  fontSize: 'var(--font-size-lg)',
+                  fontSize: 'var(--font-size-2xl)',
+                  fontWeight: 600,
+                  marginBottom: 'var(--spacing-lg)',
+                  color: 'var(--color-text)',
                 }}
               >
-                Sign Up Free
-              </button>
-            </Link>
-            <Link href="/contact">
-              <button
-                className="btn btn-secondary"
+                Ready to Manage Your Tasks?
+              </h2>
+              <p
                 style={{
-                  padding: 'var(--spacing-md) var(--spacing-xl)',
                   fontSize: 'var(--font-size-lg)',
+                  color: 'var(--color-text-secondary)',
+                  lineHeight: 1.6,
+                  marginBottom: 'var(--spacing-xl)',
                 }}
               >
-                Contact Us
-              </button>
-            </Link>
-          </div>
+                Access your personal task dashboard and stay on top of your productivity goals.
+              </p>
+              <div style={{ display: 'flex', gap: 'var(--spacing-md)', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Link href="/todos">
+                  <button
+                    className="btn btn-primary"
+                    style={{
+                      padding: 'var(--spacing-md) var(--spacing-xl)',
+                      fontSize: 'var(--font-size-lg)',
+                    }}
+                  >
+                    Manage Tasks →
+                  </button>
+                </Link>
+                {/* <Link href="/contact">
+                  <button
+                    className="btn btn-secondary"
+                    style={{
+                      padding: 'var(--spacing-md) var(--spacing-xl)',
+                      fontSize: 'var(--font-size-lg)',
+                    }}
+                  >
+                    Contact Us
+                  </button>
+                </Link> */}
+              </div>
+            </>
+          ) : (
+            // Not logged in: Show sign up CTA
+            <>
+              <h2
+                style={{
+                  fontSize: 'var(--font-size-2xl)',
+                  fontWeight: 600,
+                  marginBottom: 'var(--spacing-lg)',
+                  color: 'var(--color-text)',
+                }}
+              >
+                Ready to Get Started?
+              </h2>
+              <p
+                style={{
+                  fontSize: 'var(--font-size-lg)',
+                  color: 'var(--color-text-secondary)',
+                  lineHeight: 1.6,
+                  marginBottom: 'var(--spacing-xl)',
+                }}
+              >
+                Join thousands of users who are already managing their tasks more efficiently with Todo App.
+              </p>
+              <div style={{ display: 'flex', gap: 'var(--spacing-md)', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Link href="/register">
+                  <button
+                    className="btn btn-primary"
+                    style={{
+                      padding: 'var(--spacing-md) var(--spacing-xl)',
+                      fontSize: 'var(--font-size-lg)',
+                    }}
+                  >
+                    Sign Up Free
+                  </button>
+                </Link>
+                {/* <Link href="/contact">
+                  <button
+                    className="btn btn-secondary"
+                    style={{
+                      padding: 'var(--spacing-md) var(--spacing-xl)',
+                      fontSize: 'var(--font-size-lg)',
+                    }}
+                  >
+                    Contact Us
+                  </button>
+                </Link> */}
+              </div>
+            </>
+          )}
         </div>
       </section>
 

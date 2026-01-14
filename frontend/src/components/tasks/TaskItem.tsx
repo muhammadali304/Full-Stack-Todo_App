@@ -6,6 +6,7 @@
 
 import { useState } from 'react';
 import { TaskEditForm } from './TaskEditForm';
+import { ConfirmDialog } from '@/components/common/ConfirmDialog';
 import type { Task, UpdateTaskRequest } from '@/lib/types';
 
 interface TaskItemProps {
@@ -24,6 +25,7 @@ interface TaskItemProps {
  * - Completion checkbox
  * - Edit and delete buttons
  * - Inline edit mode with TaskEditForm
+ * - Custom delete confirmation dialog
  * - Completion visual styling (strikethrough)
  * - Responsive layout
  *
@@ -32,11 +34,13 @@ interface TaskItemProps {
  * - Loading states for async operations
  * - Error handling with rollback
  * - Edit mode toggle
+ * - Custom confirmation modal for delete
  */
 export function TaskItem({ task, onToggle, onEdit, onUpdate, onDelete }: TaskItemProps) {
   const [isToggling, setIsToggling] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [localCompleted, setLocalCompleted] = useState(task.completed);
 
   /**
@@ -62,14 +66,20 @@ export function TaskItem({ task, onToggle, onEdit, onUpdate, onDelete }: TaskIte
   };
 
   /**
-   * Handle delete with confirmation
+   * Handle delete button click - Show confirmation dialog
    */
-  const handleDelete = async () => {
+  const handleDeleteClick = () => {
     if (!onDelete || isDeleting) return;
+    setShowDeleteConfirm(true);
+  };
 
-    const confirmed = window.confirm('Are you sure you want to delete this task?');
-    if (!confirmed) return;
+  /**
+   * Handle delete confirmation
+   */
+  const handleDeleteConfirm = async () => {
+    if (!onDelete) return;
 
+    setShowDeleteConfirm(false);
     setIsDeleting(true);
 
     try {
@@ -79,6 +89,13 @@ export function TaskItem({ task, onToggle, onEdit, onUpdate, onDelete }: TaskIte
       alert('Failed to delete task. Please try again.');
       setIsDeleting(false);
     }
+  };
+
+  /**
+   * Handle delete cancellation
+   */
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
   };
 
   /**
@@ -264,7 +281,7 @@ export function TaskItem({ task, onToggle, onEdit, onUpdate, onDelete }: TaskIte
 
           {onDelete && (
             <button
-              onClick={handleDelete}
+              onClick={handleDeleteClick}
               disabled={isDeleting}
               className="btn btn-danger"
               aria-label={`Delete task "${task.title}"`}
@@ -280,6 +297,18 @@ export function TaskItem({ task, onToggle, onEdit, onUpdate, onDelete }: TaskIte
           )}
         </div>
       </div>
+
+      {/* Custom Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        title="Delete Task"
+        message={`Are you sure you want to delete "${task.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+        variant="danger"
+      />
     </div>
   );
 }

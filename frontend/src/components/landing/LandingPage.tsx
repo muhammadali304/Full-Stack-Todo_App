@@ -27,17 +27,15 @@ export function LandingPage() {
   const router = useRouter();
 
   /**
-   * Handle logout
+   * Handle logout - Stay on current page after logout
    */
   const handleLogout = async () => {
     try {
       await logout();
-      // Redirect to login page
-      router.push('/login');
+      // Don't redirect - stay on current page
     } catch (error) {
       console.error('Logout error:', error);
-      // Still redirect even if logout API call fails
-      router.push('/login');
+      // Don't redirect even if logout API call fails
     }
   };
 
