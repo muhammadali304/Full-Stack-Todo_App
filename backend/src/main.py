@@ -94,13 +94,16 @@ app = FastAPI(
 )
 
 
-# Configure CORS middleware for development
-# WARNING: In production, replace allow_origins=["*"] with specific origins
+# Configure CORS middleware for frontend communication
+# Allows requests from Next.js frontend (Vercel production + local development)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins in development
-    allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods
+    allow_origins=[
+        "https://full-stack-todo-app-snowy.vercel.app",  # Vercel production deployment
+        "http://localhost:3000",  # Local development
+    ],
+    allow_credentials=True,  # Allow cookies and authentication headers
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, PATCH, DELETE, etc.)
     allow_headers=["*"],  # Allow all headers
 )
 
