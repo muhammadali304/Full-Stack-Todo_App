@@ -433,13 +433,95 @@ export default function ContactPage() {
           padding: 'var(--spacing-xl) var(--spacing-md)',
           backgroundColor: 'var(--color-background-secondary)',
           borderTop: '1px solid var(--color-border)',
-          textAlign: 'center',
         }}
       >
-        <div className="container">
-          <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-sm)' }}>
-            © 2026 Todo App. All rights reserved.
-          </p>
+        <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--spacing-lg)' }}>
+            {/* Logo */}
+            <div style={{ flex: '0 0 auto' }}>
+              <img
+                src="/favicon.ico"
+                alt="Todo App Logo"
+                width="128"
+                height="128"
+                style={{ verticalAlign: 'middle' }}
+              />
+            </div>
+
+            {/* About */}
+            <div style={{ flex: '0 0 auto' }}>
+              <h3
+                style={{
+                  fontSize: 'var(--font-size-base)',
+                  fontWeight: 600,
+                  color: 'var(--color-text)',
+                  marginBottom: 'var(--spacing-sm)',
+                }}
+              >
+                About Us
+              </h3>
+              <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-sm)', margin: 0 }}>
+                A simple and powerful task management tool.
+              </p>
+            </div>
+
+            {/* Quick Links */}
+            <div style={{ flex: '0 0 auto' }}>
+              <h3
+                style={{
+                  fontSize: 'var(--font-size-base)',
+                  fontWeight: 600,
+                  color: 'var(--color-text)',
+                  marginBottom: 'var(--spacing-sm)',
+                }}
+              >
+                Quick Links
+              </h3>
+              <nav style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
+                <a
+                  href="/todos"
+                  style={{
+                    color: 'var(--color-text-secondary)',
+                    textDecoration: 'none',
+                    fontSize: 'var(--font-size-sm)',
+                    transition: 'color var(--transition-fast)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = 'var(--color-primary)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = 'var(--color-text-secondary)';
+                  }}
+                >
+                  Manage Tasks
+                </a>
+                <a
+                  href="/about"
+                  style={{
+                    color: 'var(--color-text-secondary)',
+                    textDecoration: 'none',
+                    fontSize: 'var(--font-size-sm)',
+                    transition: 'color var(--transition-fast)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = 'var(--color-primary)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = 'var(--color-text-secondary)';
+                  }}
+                >
+                  About
+                </a>
+              </nav>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <div style={{ borderTop: '1px solid var(--color-border)', marginTop: 'var(--spacing-lg)', paddingTop: 'var(--spacing-md)', textAlign: 'center', width: '100%' }}>
+            <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-sm)', margin: 0 }}>
+              © 2026 Todo App. All rights reserved.
+            </p>
+          </div>
         </div>
       </footer>
     </div>

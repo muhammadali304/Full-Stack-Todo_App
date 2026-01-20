@@ -9,6 +9,7 @@ import type { CreateTaskRequest } from '@/lib/types';
 interface TaskFormProps {
   onSubmit: (data: CreateTaskRequest) => Promise<void>;
   onSuccess?: () => void;
+  onCancel?: () => void;
 }
 
 /**
@@ -22,12 +23,13 @@ interface TaskFormProps {
  * - Error handling with inline messages
  * - Success feedback
  * - Auto-focus on title field after submission
+ * - Cancel functionality
  *
  * Validation Rules:
  * - Title: Required, 1-200 characters
  * - Description: Optional, max 1000 characters
  */
-export function TaskForm({ onSubmit, onSuccess }: TaskFormProps) {
+export function TaskForm({ onSubmit, onSuccess, onCancel }: TaskFormProps) {
   const [formData, setFormData] = useState<CreateTaskRequest>({
     title: '',
     description: '',
@@ -262,21 +264,34 @@ export function TaskForm({ onSubmit, onSuccess }: TaskFormProps) {
         </div> */}
       </div>
 
-      <button
-        type="submit"
-        className="btn btn-primary"
-        disabled={isSubmitting}
-        style={{ width: '100%' }}
-      >
-        {isSubmitting ? (
-          <>
-            <span className="loading-spinner" style={{ marginRight: 'var(--spacing-sm)' }}></span>
-            Creating task...
-          </>
-        ) : (
-          'Create Task'
+      <div style={{ display: 'flex', gap: 'var(--spacing-md)' }}>
+        {onCancel && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="btn btn-secondary"
+            disabled={isSubmitting}
+            style={{ flex: 1 }}
+          >
+            Cancel
+          </button>
         )}
-      </button>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={isSubmitting}
+          style={{ flex: 1 }}
+        >
+          {isSubmitting ? (
+            <>
+              <span className="loading-spinner" style={{ marginRight: 'var(--spacing-sm)' }}></span>
+              Creating task...
+            </>
+          ) : (
+            'Create Task'
+          )}
+        </button>
+      </div>
     </form>
   );
 }
