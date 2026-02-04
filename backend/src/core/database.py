@@ -12,12 +12,6 @@ from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlmodel import SQLModel
 
-# Import models to register them with SQLModel metadata
-from ..models.user import User
-from ..models.task import Task
-from ..models.conversation import Conversation
-from ..models.message import Message
-
 from .config import settings
 
 
@@ -26,25 +20,16 @@ from .config import settings
 # - pool_size: Minimum number of connections to maintain (5)
 # - max_overflow: Additional connections beyond pool_size (15)
 # - Total max connections: pool_size + max_overflow = 20
-def create_engine():
-    connect_args = {}
-    if "sqlite" in settings.get_database_url():
-        connect_args["check_same_thread"] = False
-    else:
-        connect_args["ssl"] = True  # Enable SSL for Neon PostgreSQL
-
-    return create_async_engine(
-        settings.get_database_url(),
-        echo=settings.DEBUG,  # Log SQL queries in debug mode
-        future=True,
-        pool_size=5,  # Minimum connections in pool
-        max_overflow=15,  # Additional connections when pool is exhausted
-        pool_pre_ping=True,  # Verify connections before using them
-        pool_recycle=3600,  # Recycle connections after 1 hour
-        connect_args=connect_args,  # Pass appropriate connect_args based on DB type
-    )
-
-engine = create_engine()
+engine = create_async_engine(
+    settings.get_database_url(),
+    echo=settings.DEBUG,  # Log SQL queries in debug mode
+    future=True,
+    pool_size=5,  # Minimum connections in pool
+    max_overflow=15,  # Additional connections when pool is exhausted
+    pool_pre_ping=True,  # Verify connections before using them
+    pool_recycle=3600,  # Recycle connections after 1 hour
+    connect_args={"ssl": True},  # Enable SSL for Neon PostgreSQL
+)
 
 
 # Session factory for creating database sessions

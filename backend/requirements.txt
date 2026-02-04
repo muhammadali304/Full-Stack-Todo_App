@@ -25,6 +25,3 @@ python-multipart
 python-multipart
 pydantic-settings
 email-validator
-
-# MCP SDK
-mcp

@@ -111,26 +111,6 @@ export function Header() {
               Manage Tasks
             </Link>
           )}
-          {isAuthenticated && (
-            <Link
-              href="/chat"
-              style={{
-                fontSize: 'var(--font-size-base)',
-                fontWeight: 500,
-                color: 'var(--color-text)',
-                textDecoration: 'none',
-                transition: 'color var(--transition-fast)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--color-primary)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--color-text)';
-              }}
-            >
-              AI Assistant
-            </Link>
-          )}
           {/* <Link
             href="/contact"
             style={{

@@ -258,33 +258,6 @@ export function MobileMenu({ onLogout }: MobileMenuProps) {
             </button>
           )}
 
-          {/* AI Chat - Only show if logged in */}
-          {isAuthenticated && (
-            <button
-              onClick={() => handleNavigation('/chat')}
-              style={{
-                padding: 'var(--spacing-md)',
-                backgroundColor: 'transparent',
-                border: 'none',
-                borderRadius: 'var(--radius-md)',
-                textAlign: 'left',
-                fontSize: 'var(--font-size-base)',
-                fontWeight: 500,
-                color: 'var(--color-text)',
-                cursor: 'pointer',
-                transition: 'background-color var(--transition-fast)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--color-background-secondary)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }}
-            >
-              🤖 AI Chat
-            </button>
-          )}
-
           {/* Contact Us */}
           {/* <button
             onClick={() => handleNavigation('/contact')}
