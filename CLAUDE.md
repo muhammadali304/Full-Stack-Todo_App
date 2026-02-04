@@ -23,29 +23,32 @@ You are an expert AI assistant specializing in Spec-Driven Development (SDD). Yo
   - General → `history/prompts/general/`
 - ADR suggestions: when an architecturally significant decision is detected, suggest: "📋 Architectural decision detected: <brief>. Document? Run `/sp.adr <title>`." Never auto‑create ADRs; require user consent.
 
-## Project Context: Todo Full-Stack Web Application (Phase II)
+## Project Context: Todo AI Chatbot (Phase III)
 
 ### Objective
-Transform a console-based Todo application into a modern multi-user web application with persistent storage using the Agentic Dev Stack workflow: Write spec → Generate plan → Break into tasks → Implement via Claude Code.
+Transform the multi-user web application into an AI-powered chatbot using MCP Server and OpenAI Agents SDK with persistent storage and state management using the Agentic Dev Stack workflow: Write spec → Generate plan → Break into tasks → Implement via Claude Code.
 
 ### Technology Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | Next.js 16+ (App Router) |
+| Frontend | OpenAI ChatKit |
 | Backend | Python FastAPI |
+| AI Framework | OpenAI Agents SDK |
+| MCP Protocol | Official MCP SDK |
 | ORM | SQLModel |
 | Database | Neon Serverless PostgreSQL |
 | Authentication | Better Auth (JWT-based) |
 | Development | Claude Code + Spec-Kit Plus |
 
 ### Core Requirements
-- Implement all 5 Basic Level features as a web application
-- Create RESTful API endpoints with proper HTTP methods
-- Build responsive frontend interface
-- Store data in Neon Serverless PostgreSQL database
-- Multi-user authentication with signup/signin using Better Auth
-- User data isolation (users can only access their own todos)
+- Implement all 5 Basic Level features via AI chatbot interface
+- Enable natural-language todo management (add, list, complete, delete, update)
+- Support conversation persistence and resume functionality
+- Ensure all operations happen through MCP tools only
+- Maintain user data isolation with JWT-secured access
+- Log and persist all tool calls for explainable AI
+- Implement crash-safe state management
 
 ### Authentication Architecture
 **Better Auth JWT Flow:**
@@ -82,35 +85,35 @@ Transform a console-based Todo application into a modern multi-user web applicat
 
 #### 2. Frontend Agent (`nextjs-ui`)
 **Use for:**
-- Building Next.js 16+ App Router pages and components
-- Creating responsive UI layouts
-- Implementing forms (todo creation, login, signup)
-- Client-side state management
-- Fetching data from backend APIs
-- Handling authentication state on frontend
-- Routing and navigation
+- Integrating OpenAI ChatKit for chat interface
+- Creating responsive chat UI layouts
+- Implementing authentication flows for chat
+- Client-side state management for chat
+- Managing JWT tokens for chat authentication
+- Chat message display and interaction handling
 
 **Example triggers:**
-- "Create a todo list component"
-- "Build the login page"
-- "Make the dashboard responsive"
-- "Implement the todo form with validation"
+- "Integrate OpenAI ChatKit into the UI"
+- "Build the chat interface with message history"
+- "Implement JWT token handling for chat"
+- "Create a responsive chat layout"
 
 #### 3. Backend Agent (`fastapi-backend-dev`)
 **Use for:**
-- Creating FastAPI REST API endpoints
-- Implementing request/response models with Pydantic
-- Adding JWT authentication middleware
-- Connecting to Neon database via SQLModel
-- Implementing business logic for CRUD operations
-- Error handling and validation
+- Creating FastAPI chat endpoint at `/api/{user_id}/chat`
+- Implementing OpenAI Agents SDK integration
+- Setting up MCP server integration
+- Adding JWT authentication middleware for chat endpoints
+- Connecting to Neon database for conversation persistence
+- Implementing business logic for AI agent operations
+- Error handling and validation for chat operations
 - API documentation
 
 **Example triggers:**
-- "Create API endpoints for todos"
-- "Implement the backend for user registration"
-- "Add validation to the create todo endpoint"
-- "Optimize the API performance"
+- "Create the chat endpoint at `/api/{user_id}/chat`"
+- "Integrate OpenAI Agents SDK for todo management"
+- "Implement MCP server integration for todo tools"
+- "Add JWT validation to chat endpoints"
 
 #### 4. Database Agent (`neon-db-architect`)
 **Use for:**
@@ -139,19 +142,21 @@ Transform a console-based Todo application into a modern multi-user web applicat
 ### Multi-Agent Coordination
 When a feature spans multiple domains:
 1. Start with the database schema (neon-db-architect)
-2. Build backend API endpoints (fastapi-backend-dev)
-3. Implement authentication if needed (auth-security)
-4. Create frontend UI (nextjs-ui)
+2. Implement MCP tools for todo operations (fastapi-backend-dev)
+3. Build OpenAI agent integration (fastapi-backend-dev)
+4. Implement authentication if needed (auth-security)
+5. Create frontend UI (nextjs-ui)
 
 **Example:**
 ```
-User: "Implement the todo creation feature"
+User: "Implement the todo creation feature via AI chatbot"
 
 Response:
-1. Use neon-db-architect to ensure todos table schema is correct
-2. Use fastapi-backend-dev to create POST /api/todos endpoint
-3. Use auth-security to add JWT validation to the endpoint
-4. Use nextjs-ui to build the todo creation form
+1. Use neon-db-architect to ensure todos table schema supports AI operations
+2. Use fastapi-backend-dev to create MCP tools for todo operations
+3. Use fastapi-backend-dev to integrate OpenAI Agents SDK with MCP tools
+4. Use auth-security to add JWT validation to chat endpoints
+5. Use nextjs-ui to build the chat interface for todo management
 ```
 
 ## Development Guidelines

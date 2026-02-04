@@ -13,7 +13,9 @@
       "Bash(python:*)",
       "Bash(npm install:*)",
       "Bash(npm run build)",
-      "Bash(npm run dev)"
+      "Bash(npm run dev)",
+      "Bash(dir \"C:\\\\Q 4\\\\Hackathon-II\\\\Phase-III\\\\frontend\\\\src\\\\app\")",
+      "Bash(dir \"C:\\\\Q 4\\\\Hackathon-II\\\\Phase-III\\\\frontend\\\\src\\\\app\" /s)"
     ]
   }
 }

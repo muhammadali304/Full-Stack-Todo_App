@@ -496,6 +496,23 @@ export default function ContactPage() {
                   Manage Tasks
                 </a>
                 <a
+                  href="/chat"
+                  style={{
+                    color: 'var(--color-text-secondary)',
+                    textDecoration: 'none',
+                    fontSize: 'var(--font-size-sm)',
+                    transition: 'color var(--transition-fast)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = 'var(--color-primary)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = 'var(--color-text-secondary)';
+                  }}
+                >
+                  AI Assistant
+                </a>
+                <a
                   href="/about"
                   style={{
                     color: 'var(--color-text-secondary)',

@@ -117,6 +117,24 @@ export function LandingPage() {
               Manage Tasks
             </Link>
           )}
+          <Link
+            href="/chat"
+            style={{
+              fontSize: 'var(--font-size-base)',
+              fontWeight: 500,
+              color: 'var(--color-text)',
+              textDecoration: 'none',
+              transition: 'color var(--transition-fast)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--color-text)';
+            }}
+          >
+            AI Assistant
+          </Link>
           {/* <Link
             href="/contact"
             style={{
@@ -700,7 +718,7 @@ export function LandingPage() {
               </p>
             </div>
 
-            {/* Feature 6 */}
+            {/* Feature 6 - AI Assistant */}
             <div
               style={{
                 padding: 'var(--spacing-xl)',
@@ -740,7 +758,9 @@ export function LandingPage() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                  <path d="M12 8v8m-4-4h8" />
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M8 16l2.5-2.5L12 15l1.5-1.5L16 16" />
                 </svg>
               </div>
               <h3
@@ -751,10 +771,11 @@ export function LandingPage() {
                   color: 'var(--color-text)',
                 }}
               >
-                Real-time Updates
+                AI-Powered Assistant
               </h3>
               <p style={{ color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
-                Instant synchronization across all your devices. Your tasks are always up to date.
+                Our intelligent assistant understands natural language. Just type "Add buy groceries",
+                "Complete task 1", or "Delete task 2" and the AI will handle it for you automatically.
               </p>
             </div>
           </div>
@@ -914,6 +935,23 @@ export function LandingPage() {
                   }}
                 >
                   Manage Tasks
+                </a>
+                <a
+                  href="/chat"
+                  style={{
+                    color: 'var(--color-text-secondary)',
+                    textDecoration: 'none',
+                    fontSize: 'var(--font-size-sm)',
+                    transition: 'color var(--transition-fast)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = 'var(--color-primary)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = 'var(--color-text-secondary)';
+                  }}
+                >
+                  AI Assistant
                 </a>
                 <a
                   href="/about"

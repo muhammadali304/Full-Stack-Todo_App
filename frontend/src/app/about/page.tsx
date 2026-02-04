@@ -242,9 +242,9 @@ export default function AboutPage() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                  <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                  <line x1="12" y1="22.08" x2="12" y2="12" />
+                  <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                  <path d="M2 17l10 5 10-5" />
+                  <path d="M2 12l10 5 10-5" />
                 </svg>
               </div>
               <h3
@@ -255,12 +255,72 @@ export default function AboutPage() {
                   color: 'var(--color-text)',
                 }}
               >
-                Serverless Database
+                AI-Powered Assistant
               </h3>
               <p style={{ fontSize: 'var(--font-size-base)', color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
-                Powered by Neon Serverless PostgreSQL for instant scaling, automatic backups, and zero
-                database maintenance.
+                Our intelligent assistant understands natural language commands. Just type "Add buy groceries",
+                "Complete task 1", or "Delete task 2" and the AI will handle it for you automatically.
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* AI Assistant Section */}
+      <section style={{ padding: 'var(--spacing-2xl) var(--spacing-md)', backgroundColor: 'var(--color-background)' }}>
+        <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 'var(--spacing-2xl)' }}>
+            <h2
+              style={{
+                fontSize: 'var(--font-size-2xl)',
+                fontWeight: 600,
+                marginBottom: 'var(--spacing-md)',
+                color: 'var(--color-text)',
+              }}
+            >
+              Meet Your AI Todo Assistant
+            </h2>
+            <p style={{ fontSize: 'var(--font-size-lg)', color: 'var(--color-text-secondary)', maxWidth: '600px', margin: '0 auto' }}>
+              Our intelligent assistant understands natural language and helps you manage tasks effortlessly
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--spacing-xl)' }}>
+            <div style={{ padding: 'var(--spacing-xl)', backgroundColor: 'var(--color-background-secondary)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-border)' }}>
+              <div style={{ fontSize: 32, marginBottom: 'var(--spacing-md)', textAlign: 'center' }}>🤖</div>
+              <h3 style={{ fontSize: 'var(--font-size-lg)', fontWeight: 600, marginBottom: 'var(--spacing-sm)', color: 'var(--color-text)' }}>Natural Language Processing</h3>
+              <p style={{ color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
+                Simply tell your assistant what to do in plain English. No need to remember specific commands -
+                just speak naturally like you would to a friend.
+              </p>
+            </div>
+
+            <div style={{ padding: 'var(--spacing-xl)', backgroundColor: 'var(--color-background-secondary)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-border)' }}>
+              <div style={{ fontSize: 32, marginBottom: 'var(--spacing-md)', textAlign: 'center' }}>💬</div>
+              <h3 style={{ fontSize: 'var(--font-size-lg)', fontWeight: 600, marginBottom: 'var(--spacing-sm)', color: 'var(--color-text)' }}>Conversational Interface</h3>
+              <p style={{ color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
+                Chat with your assistant like a real person. Add, complete, delete, or manage tasks with
+                conversational commands like "Add buy milk" or "Mark task 1 as done".
+              </p>
+            </div>
+
+            <div style={{ padding: 'var(--spacing-xl)', backgroundColor: 'var(--color-background-secondary)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-border)' }}>
+              <div style={{ fontSize: 32, marginBottom: 'var(--spacing-md)', textAlign: 'center' }}>⚡</div>
+              <h3 style={{ fontSize: 'var(--font-size-lg)', fontWeight: 600, marginBottom: 'var(--spacing-sm)', color: 'var(--color-text)' }}>Smart Automation</h3>
+              <p style={{ color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
+                The AI automatically categorizes your requests, learns from your patterns, and
+                provides helpful suggestions to keep you organized.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ marginTop: 'var(--spacing-2xl)', padding: 'var(--spacing-xl)', backgroundColor: 'var(--color-background-secondary)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-border)', textAlign: 'center' }}>
+            <h3 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 600, marginBottom: 'var(--spacing-lg)', color: 'var(--color-text)' }}>Try These Commands:</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-md)' }}>
+              <div style={{ padding: 'var(--spacing-md)', backgroundColor: 'var(--color-background)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>• "Add buy groceries"</div>
+              <div style={{ padding: 'var(--spacing-md)', backgroundColor: 'var(--color-background)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>• "Complete task 1"</div>
+              <div style={{ padding: 'var(--spacing-md)', backgroundColor: 'var(--color-background)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>• "Delete task 2"</div>
+              <div style={{ padding: 'var(--spacing-md)', backgroundColor: 'var(--color-background)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>• "Show my tasks"</div>
             </div>
           </div>
         </div>
@@ -654,6 +714,23 @@ export default function AboutPage() {
                   }}
                 >
                   Manage Tasks
+                </a>
+                <a
+                  href="/chat"
+                  style={{
+                    color: 'var(--color-text-secondary)',
+                    textDecoration: 'none',
+                    fontSize: 'var(--font-size-sm)',
+                    transition: 'color var(--transition-fast)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = 'var(--color-primary)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = 'var(--color-text-secondary)';
+                  }}
+                >
+                  AI Assistant
                 </a>
                 <a
                   href="/about"

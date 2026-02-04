@@ -13,6 +13,7 @@ from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
     from .task import Task
+    from .conversation import Conversation
 
 
 class User(SQLModel, table=True):
@@ -91,6 +92,10 @@ class User(SQLModel, table=True):
 
     # Relationships
     tasks: List["Task"] = Relationship(
+        back_populates="user",
+        sa_relationship_kwargs={"cascade": "all, delete-orphan"}
+    )
+    conversations: List["Conversation"] = Relationship(
         back_populates="user",
         sa_relationship_kwargs={"cascade": "all, delete-orphan"}
     )

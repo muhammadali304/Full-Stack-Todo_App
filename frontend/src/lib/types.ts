@@ -156,6 +156,110 @@ export function isTask(obj: any): obj is Task {
 }
 
 // ============================================================================
+// Chat-Specific Types (for AI Agent Integration)
+// ============================================================================
+
+// ToolCall Object - Represents a tool call made by the AI agent
+export interface ToolCall {
+  id: string;
+  name: string;
+  arguments: Record<string, any>;
+  status: 'pending' | 'executing' | 'completed' | 'error';
+  result?: any;
+  displayType: 'inline' | 'card' | 'expanded';
+}
+
+// ToolCallResult Object - Represents the result of a tool call
+export interface ToolCallResult {
+  toolCallId: string;
+  success: boolean;
+  data?: any;
+  error?: string;
+}
+
+// ChatMessage Entity - Represents a single message in the UI
+export interface ChatMessageBase {
+  role: 'user' | 'assistant';
+  content: string;
+  createdAt: string; // ISO 8601 string format
+  status: 'sending' | 'streaming' | 'completed' | 'error';
+  toolCalls?: ToolCall[];
+  toolCallResults?: ToolCallResult[];
+  isStreaming?: boolean;
+  streamingError?: string;
+}
+
+export interface ChatMessage extends ChatMessageBase {
+  id: string; // UUID
+}
+
+export interface ChatMessageCreate extends ChatMessageBase {
+  // Properties needed when creating a new message
+}
+
+export interface ChatMessageUpdate {
+  content?: string;
+  status?: 'sending' | 'streaming' | 'completed' | 'error';
+  toolCallResults?: ToolCallResult[];
+}
+
+// Conversation Entity - Represents a user's chat session
+export interface ConversationBase {
+  userId: string; // Foreign key to User
+  title: string;
+  createdAt: string; // ISO 8601 string format
+  updatedAt: string; // ISO 8601 string format
+  expiresAt: string; // ISO 8601 string format - 30-day retention
+  isActive: boolean;
+}
+
+export interface Conversation extends ConversationBase {
+  id: string; // UUID
+  messageCount: number;
+}
+
+export interface ConversationCreate {
+  userId: string;
+  title?: string; // Auto-generated if not provided
+}
+
+export interface ConversationUpdate {
+  title?: string;
+}
+
+// StreamChunk Model - Represents a single chunk of data received from SSE
+export interface StreamChunk {
+  type: 'message' | 'tool_call' | 'tool_result' | 'error';
+  data: any;
+  timestamp: string; // ISO 8601 string format
+  correlationId: string;
+}
+
+// API Request/Response Types for Chat
+export interface CreateTaskRequest {
+  title: string;
+  description?: string;
+}
+
+export interface UpdateTaskRequest {
+  title?: string;
+  description?: string;
+  completed?: boolean;
+}
+
+export interface ChatRequest {
+  message: string;
+  conversationId?: string; // Optional - if continuing existing conversation
+}
+
+export interface ChatResponse {
+  response: string;
+  conversationId: string;
+  toolCalls?: ToolCall[];
+  toolCallResults?: ToolCallResult[];
+}
+
+// ============================================================================
 // Utility Types
 // ============================================================================
 

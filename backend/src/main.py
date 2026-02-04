@@ -100,7 +100,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://full-stack-todo-app-snowy.vercel.app",  # Vercel production deployment
-        "http://localhost:3000",  # Local development
+        "http://localhost:3000", 
+        "http://localhost:3001" # Local development
     ],
     allow_credentials=True,  # Allow cookies and authentication headers
     allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, PATCH, DELETE, etc.)
@@ -174,13 +175,23 @@ async def root() -> dict:
 
 
 # Register API routes
-from .api.routes import tasks, auth
+from .api.routes import tasks, auth, chat
+
+# Import MCP server
+from .services.mcp_server import mcp_server_instance
 
 # Authentication routes
 app.include_router(auth.router, prefix="/api")
 
 # Task routes
 app.include_router(tasks.router, prefix="/api")
+
+# Chat routes
+app.include_router(chat.router, prefix="/api")
+
+# MCP Server routes (if needed)
+# Note: The MCP server is designed to work with the MCP protocol
+# The actual integration would depend on how the MCP server is exposed
 
 
 if __name__ == "__main__":

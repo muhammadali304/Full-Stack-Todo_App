@@ -1,0 +1,257 @@
+openapi: 3.0.3
+info:
+  title: AI Agent Chat API
+  description: API specification for AI agent chat endpoint that enables users to manage todos via natural language
+  version: 1.0.0
+  contact:
+    name: Todo App Development Team
+servers:
+  - url: https://api.todoapp.com/v1
+    description: Production server
+  - url: https://staging.todoapp.com/v1
+    description: Staging server
+  - url: http://localhost:8000/v1
+    description: Development server
+
+paths:
+  /api/{user_id}/chat:
+    post:
+      summary: Process natural language chat request
+      description: Process a natural language request from a user to manage their todos via the AI agent
+      operationId: processChatRequest
+      tags:
+        - Chat
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: The ID of the user making the request (must match authenticated user)
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Successfully processed the chat request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from Better Auth system
+
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: The natural language message from the user
+          example: "Add a task to buy groceries"
+          minLength: 1
+          maxLength: 2000
+
+    ChatResponse:
+      type: object
+      required:
+        - response
+        - conversation_id
+      properties:
+        response:
+          type: string
+          description: The AI agent's response to the user
+          example: "I've added a task 'buy groceries' to your list."
+        conversation_id:
+          type: string
+          format: uuid
+          description: The ID of the conversation for context tracking
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        tool_calls:
+          type: array
+          description: List of tool calls made by the AI agent as part of processing the request
+          items:
+            $ref: '#/components/schemas/ToolCall'
+        messages:
+          type: array
+          description: List of messages in the conversation (if requested)
+          items:
+            $ref: '#/components/schemas/MessageSummary'
+
+    ToolCall:
+      type: object
+      required:
+        - name
+        - parameters
+        - result
+      properties:
+        name:
+          type: string
+          description: The name of the tool that was called
+          example: "add_task"
+          enum: [add_task, list_tasks, complete_task, delete_task, update_task]
+        parameters:
+          type: object
+          description: The parameters passed to the tool
+          example:
+            title: "buy groceries"
+        result:
+          type: object
+          description: The result returned by the tool
+          example:
+            id: "123e4567-e89b-12d3-a456-426614174000"
+            title: "buy groceries"
+            completed: false
+
+    MessageSummary:
+      type: object
+      required:
+        - id
+        - role
+        - content
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the message
+          example: "123e4567-e89b-12d3-a456-426614174001"
+        role:
+          type: string
+          description: The role of the message sender
+          example: "assistant"
+          enum: [user, assistant]
+        content:
+          type: string
+          description: The content of the message
+          example: "I've added a task 'buy groceries' to your list."
+        created_at:
+          type: string
+          format: date-time
+          description: When the message was created
+          example: "2026-01-20T12:00:00Z"
+
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Invalid input parameters"
+            details: "Message is required and cannot be empty"
+
+    Unauthorized:
+      description: Authentication required or invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Unauthorized"
+            details: "Invalid or missing JWT token"
+
+    Forbidden:
+      description: Access forbidden (user doesn't own the resource)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Forbidden"
+            details: "You don't have permission to access this resource"
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Not Found"
+            details: "User with specified ID not found"
+
+    UnprocessableEntity:
+      description: Semantic errors in the request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Unprocessable Entity"
+            details: "Natural language request could not be understood"
+
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Rate limit exceeded"
+            details: "Too many requests, please try again later"
+
+    ServiceUnavailable:
+      description: Service temporarily unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Service Unavailable"
+            details: "AI agent service is temporarily unavailable"
+
+    InternalServerError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Internal Server Error"
+            details: "An unexpected error occurred"
+
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Something went wrong"
+        details:
+          type: string
+          description: Additional error details
+          example: "More specific information about the error"

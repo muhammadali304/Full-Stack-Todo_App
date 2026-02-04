@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
-import '@/styles/globals.css';
+import '../styles/globals.css';
 
 export const metadata: Metadata = {
   title: 'Todo App - Manage Your Tasks',
